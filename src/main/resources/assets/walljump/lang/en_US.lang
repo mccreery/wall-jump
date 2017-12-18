@@ -1,0 +1,41 @@
+key.walljump_menu.desc=Wall Jump Menu
+key.walljump.desc=Wall Jump
+key.walljump.category=Wall Jump Mod
+
+menu.walljump.settings=Wall Jump Settings
+menu.walljump.moreStable=< More Stable
+menu.walljump.prohibited=Prohibited blocks for wall jumping (seperate using commas)
+
+menu.walljump.separator=: 
+
+menu.walljump.setting.wallJumping=Wall Jumping
+menu.walljump.setting.flyingWallJump=Flying Wall Jump
+menu.walljump.setting.barIcons=Bar Icons
+menu.walljump.setting.jumpType=Jumping Type
+menu.walljump.setting.autoTurn=Auto-Turn
+menu.walljump.setting.displayType=Display
+menu.walljump.setting.useSpace=Use Jump Key
+menu.walljump.setting.circleMode=Circle Mode
+
+menu.walljump.setting.barIcons.boots=Boots
+menu.walljump.setting.barIcons.feathers=Feathers
+menu.walljump.setting.barIcons.players=Players
+menu.walljump.setting.barIcons.smoke=Smoke
+
+menu.walljump.setting.jumpType.fixed=Fixed
+menu.walljump.setting.jumpType.limited=Limited
+menu.walljump.setting.jumpType.unlimited=Unlimited
+
+menu.walljump.setting.displayType.barAboveFood=Bar Above Food
+menu.walljump.setting.displayType.barAboveArmor=Bar Above Armor
+menu.walljump.setting.displayType.barTopLeft=Bar Top Left
+menu.walljump.setting.displayType.barTopRight=Bar Top Right
+menu.walljump.setting.displayType.barBottomLeft=Bar Bottom Left
+menu.walljump.setting.displayType.barBottomRight=Bar Bottom Right
+menu.walljump.setting.displayType.textTopLeft=Text Top Left
+menu.walljump.setting.displayType.textTopRight=Text Top Right
+menu.walljump.setting.displayType.textBottomLeft=Text Bottom Left
+menu.walljump.setting.displayType.textBottomRight=Text Bottom Right
+
+walljump.remaining=Wall Jumps Remaining: 
+walljump.infinity=Infinity

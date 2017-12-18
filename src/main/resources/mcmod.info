@@ -1,0 +1,16 @@
+[
+{
+"modid": "walljump",
+"name": "WallJump",
+"description": "Allows you to bounce off of walls to scale caverns and mountains; you can wall jump just like Mario! §l§4T§ch§6a§en§ak §2y§3o§1u §rfor downloading!",
+"version": "1.2.1",
+"mcversion": "1.7.2",
+"logoFile": "logo.png",
+"url": "http://www.nukeduck.tk/",
+"authors": ["NukeDuck"],
+"credits": "Massive thanks to the Mojang team and the creators of Minecraft Forge.",
+"parent": "",
+"screenshots": [],
+"dependencies": ["mod_MinecraftForge"]
+}
+]
