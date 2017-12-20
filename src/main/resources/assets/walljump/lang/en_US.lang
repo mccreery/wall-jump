@@ -1,41 +1,39 @@
-key.walljump_menu.desc=Wall Jump Menu
-key.walljump.desc=Wall Jump
-key.walljump.category=Wall Jump Mod
+wallJump.category=Wall Jump Mod
+wallJump.key.jump=Wall Jump
+wallJump.key.menu=Wall Jump Menu
 
-menu.walljump.settings=Wall Jump Settings
-menu.walljump.moreStable=< More Stable
-menu.walljump.prohibited=Prohibited blocks for wall jumping (seperate using commas)
+menu.wallJump=Wall Jump Settings
+menu.wallJump.moreStable=< More Stable
+menu.wallJump.prohibited=Prohibited blocks for wall jumping (seperate using commas)
 
-menu.walljump.separator=: 
+menu.wallJump.setting.wallJumping=Wall Jumping
+menu.wallJump.setting.flyingWallJump=Flying Wall Jump
+menu.wallJump.setting.barIcons=Bar Icons
+menu.wallJump.setting.jumpType=Jumping Type
+menu.wallJump.setting.autoTurn=Auto-Turn
+menu.wallJump.setting.displayType=Display
+menu.wallJump.setting.useSpace=Use Jump Key
+menu.wallJump.setting.circleMode=Circle Mode
 
-menu.walljump.setting.wallJumping=Wall Jumping
-menu.walljump.setting.flyingWallJump=Flying Wall Jump
-menu.walljump.setting.barIcons=Bar Icons
-menu.walljump.setting.jumpType=Jumping Type
-menu.walljump.setting.autoTurn=Auto-Turn
-menu.walljump.setting.displayType=Display
-menu.walljump.setting.useSpace=Use Jump Key
-menu.walljump.setting.circleMode=Circle Mode
+menu.wallJump.setting.barIcons.boots=Boots
+menu.wallJump.setting.barIcons.feathers=Feathers
+menu.wallJump.setting.barIcons.players=Players
+menu.wallJump.setting.barIcons.smoke=Smoke
 
-menu.walljump.setting.barIcons.boots=Boots
-menu.walljump.setting.barIcons.feathers=Feathers
-menu.walljump.setting.barIcons.players=Players
-menu.walljump.setting.barIcons.smoke=Smoke
+menu.wallJump.setting.jumpType.fixed=Fixed
+menu.wallJump.setting.jumpType.limited=Limited
+menu.wallJump.setting.jumpType.unlimited=Unlimited
 
-menu.walljump.setting.jumpType.fixed=Fixed
-menu.walljump.setting.jumpType.limited=Limited
-menu.walljump.setting.jumpType.unlimited=Unlimited
+menu.wallJump.setting.displayType.barAboveFood=Bar Above Food
+menu.wallJump.setting.displayType.barAboveArmor=Bar Above Armor
+menu.wallJump.setting.displayType.barTopLeft=Bar Top Left
+menu.wallJump.setting.displayType.barTopRight=Bar Top Right
+menu.wallJump.setting.displayType.barBottomLeft=Bar Bottom Left
+menu.wallJump.setting.displayType.barBottomRight=Bar Bottom Right
+menu.wallJump.setting.displayType.textTopLeft=Text Top Left
+menu.wallJump.setting.displayType.textTopRight=Text Top Right
+menu.wallJump.setting.displayType.textBottomLeft=Text Bottom Left
+menu.wallJump.setting.displayType.textBottomRight=Text Bottom Right
 
-menu.walljump.setting.displayType.barAboveFood=Bar Above Food
-menu.walljump.setting.displayType.barAboveArmor=Bar Above Armor
-menu.walljump.setting.displayType.barTopLeft=Bar Top Left
-menu.walljump.setting.displayType.barTopRight=Bar Top Right
-menu.walljump.setting.displayType.barBottomLeft=Bar Bottom Left
-menu.walljump.setting.displayType.barBottomRight=Bar Bottom Right
-menu.walljump.setting.displayType.textTopLeft=Text Top Left
-menu.walljump.setting.displayType.textTopRight=Text Top Right
-menu.walljump.setting.displayType.textBottomLeft=Text Bottom Left
-menu.walljump.setting.displayType.textBottomRight=Text Bottom Right
-
-walljump.remaining=Wall Jumps Remaining: 
-walljump.infinity=Infinity
+wallJump.remaining=Wall Jumps Remaining: %s
+wallJump.infinity=Infinity
