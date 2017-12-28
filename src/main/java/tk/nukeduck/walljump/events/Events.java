@@ -1,15 +1,14 @@
 package tk.nukeduck.walljump.events;
 
-import java.util.ArrayList;
+import static tk.nukeduck.walljump.WallJump.MC;
+
 import java.util.HashMap;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.command.CommandBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
@@ -17,16 +16,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.client.GuiIngameForge;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import tk.nukeduck.walljump.WallJump;
+import tk.nukeduck.walljump.settings.Config;
 
 public class Events {
-	private static final ResourceLocation icons = new ResourceLocation("walljump", "textures/gui/wallJumpIcons.png");
+	private static final ResourceLocation ICONS = new ResourceLocation("walljump", "textures/gui/wallJumpIcons.png");
 
 	/** Indicates how many degrees are still to be turned by the player. */
 	private static int rotationRemaining;
@@ -59,75 +59,30 @@ public class Events {
 		return armorLimits.containsKey(material) ? armorLimits.get(material) : 3;
 	}
 
-	public Events() {}
-	public IBlockState[] prohibitedBlocks = null;
-
-	public boolean isProhibitedBlock(World world, EntityPlayer player) {
-		return isProhibitedBlock(getWall(world, player));
-	}
-
-	public boolean isProhibitedBlock(IBlockState blockState) {
-		for(IBlockState block : prohibitedBlocks) {
-			if(blockState.equals(block))
-				return true;
-		}
-		return false;
-	}
-
-	public IBlockState[] reloadProhibitedBlocks() {
-		return prohibitedBlocks = this.getProhibitedBlocks();
-	}
-
-	public IBlockState[] getProhibitedBlocks() {
-		String exceptions = WallJump.config.exceptions.getString();
-		if(exceptions.length() == 0) return new IBlockState[0];
-
-		ArrayList<IBlockState> stacks = new ArrayList<IBlockState>();
-		String[] blocks = exceptions.split(",");
-
-		for(String block : blocks) {
-			String[] parts = block.split(":");
-
-			if(parts.length == 3) parts = new String[] {parts[0] + ":" + parts[1], parts[2]};
-			else if(parts.length == 2 && !isNumeric(parts[1])) parts = new String[] {parts[0] + ":" + parts[1]};
-
-			System.out.println(parts[0] + (parts.length > 1 ? ", " + parts[1] : ""));
-
-			try {
-				stacks.add(CommandBase.getBlockByText(null, parts[0]).getStateFromMeta(parts.length > 1 ? Integer.parseInt(parts[1]) : 0));
-			} catch(Exception e) {}
-		}
-		return stacks.toArray(new IBlockState[stacks.size()]);
-	}
-
-	public static boolean isNumeric(String s) {
-		return s.matches("[0-9]+");
-	}
-
 	public static boolean isKeyDown() {
-		return WallJump.ACTION.isKeyDown() || (WallJump.config.jumpKey() && WallJump.MINECRAFT.gameSettings.keyBindJump.isKeyDown());
+		return WallJump.ACTION.isKeyDown() || (Config.jumpKey() && MC.gameSettings.keyBindJump.isKeyDown());
 	}
 
 	@SubscribeEvent
 	public void onPlayerTick(PlayerTickEvent e) {
-		if(e.phase == Phase.END && WallJump.MINECRAFT != null) {
-			if(!WallJump.MINECRAFT.player.collidedHorizontally) {
-				shouldSprint = WallJump.MINECRAFT.player.isSprinting();
+		if(e.phase == Phase.END && MC != null) {
+			if(!MC.player.collidedHorizontally) {
+				shouldSprint = MC.player.isSprinting();
 			}
 			IBlockState blockFacing = getWall(e.player.world, e.player);
 
-			if(blockFacing != null && !isProhibitedBlock(blockFacing) && blockFacing.getMaterial().blocksMovement() && isKeyDown()) {
-				if(rotationRemaining < 80 && WallJump.MINECRAFT.player.collidedHorizontally && WallJump.MINECRAFT.player.motionY < 0 && WallJump.MINECRAFT.player.fallDistance > 0 && jumpsLeft > 0 && !WallJump.MINECRAFT.player.isInWater() && WallJump.config.enabled()) {
-					if(!WallJump.MINECRAFT.player.capabilities.isFlying) {
+			if(blockFacing != null && Config.canJumpFrom(blockFacing) && blockFacing.getMaterial().blocksMovement() && isKeyDown()) {
+				if(rotationRemaining < 80 && MC.player.collidedHorizontally && MC.player.motionY < 0 && MC.player.fallDistance > 0 && jumpsLeft > 0 && !MC.player.isInWater() && Config.enabled()) {
+					if(!MC.player.capabilities.isFlying) {
 						playJumpSound(e.player.world, e.player);
 
-						if(!WallJump.MINECRAFT.player.capabilities.isCreativeMode && !WallJump.config.capacity().equals("unlimited")) jumpsLeft -= 1;
-						if(!WallJump.config.circleMode()) left = !left;
-						WallJump.MINECRAFT.player.motionY = bounceBack;
+						if(!MC.player.capabilities.isCreativeMode && !Config.capacity().equals("unlimited")) jumpsLeft -= 1;
+						if(!Config.circleMode()) left = !left;
+						MC.player.motionY = bounceBack;
 
-						double a = Math.toRadians(WallJump.MINECRAFT.player.rotationYaw + 180);
-						WallJump.MINECRAFT.player.motionX = -Math.sin(a) / 4;
-						WallJump.MINECRAFT.player.motionZ = Math.cos(a) / 4;
+						double a = Math.toRadians(MC.player.rotationYaw + 180);
+						MC.player.motionX = -Math.sin(a) / 4;
+						MC.player.motionZ = Math.cos(a) / 4;
 
 						rotationRemaining = 180;
 						//fallDistance = 0;
@@ -138,22 +93,22 @@ public class Events {
 				}
 			}
 
-			if(!WallJump.MINECRAFT.isGamePaused() && rotationRemaining > 0) {
-				if(WallJump.config.autoTurn()) {
+			if(!MC.isGamePaused() && rotationRemaining > 0) {
+				if(Config.autoTurn()) {
 					if(left) {
 						if(rotationRemaining >= 25) {
-							WallJump.MINECRAFT.player.rotationYaw -= 25;
+							MC.player.rotationYaw -= 25;
 							rotationRemaining -= 25;
 						} else {
-							WallJump.MINECRAFT.player.rotationYaw -= rotationRemaining;
+							MC.player.rotationYaw -= rotationRemaining;
 							rotationRemaining = 0;
 						}
 					} else {
 						if(rotationRemaining >= 25) {
-							WallJump.MINECRAFT.player.rotationYaw += 25;
+							MC.player.rotationYaw += 25;
 							rotationRemaining -= 25;
 						} else {
-							WallJump.MINECRAFT.player.rotationYaw += rotationRemaining;
+							MC.player.rotationYaw += rotationRemaining;
 							rotationRemaining = 0;
 						}
 					}
@@ -164,11 +119,11 @@ public class Events {
 		}
 
 		//Refill wall jump bar according to boots worn
-		if(WallJump.MINECRAFT.world != null && WallJump.MINECRAFT.player.onGround) {
-			String capacity = WallJump.config.capacity();
+		if(MC.world != null && MC.player.onGround) {
+			String capacity = Config.capacity();
 			if(capacity.equals("limited")) {
-				if(WallJump.MINECRAFT.player.inventory.armorItemInSlot(0) != null) {
-					jumpsLeft = getJumpCount(WallJump.MINECRAFT.player.inventory.armorItemInSlot(0));
+				if(MC.player.inventory.armorItemInSlot(0) != null) {
+					jumpsLeft = getJumpCount(MC.player.inventory.armorItemInSlot(0));
 				} else {
 					jumpsLeft = 3; //Barefoot
 				}
@@ -179,99 +134,73 @@ public class Events {
 			}
 		}
 
-		if(WallJump.MINECRAFT.player != null && WallJump.MINECRAFT.player.onGround) {
+		if(MC.player != null && MC.player.onGround) {
 			isWallJumping = false;
 		}
 
-		if(shouldSprint && !WallJump.MINECRAFT.player.isSprinting()) {
+		if(shouldSprint && !MC.player.isSprinting()) {
 			try {
-				WallJump.MINECRAFT.player.setSprinting(true);
+				MC.player.setSprinting(true);
 			} catch(Exception ex) {}
 		}
 	}
 
 	@SubscribeEvent
 	public void onRenderOverlayTick(RenderGameOverlayEvent.Post e) {
-		if(e.getType() == ElementType.ALL && Minecraft.getMinecraft().playerController.shouldDrawHUD()) {
-			WallJump.MINECRAFT.renderEngine.bindTexture(icons);
+		if(e.getType() == ElementType.ALL && Minecraft.getMinecraft().playerController.shouldDrawHUD() && jumpsLeft > 0 && Config.enabled()) {
+			MC.renderEngine.bindTexture(ICONS);
 
-			// Variables used to greatly shorten the following lines.
-			ScaledResolution scaledResolution = new ScaledResolution(WallJump.MINECRAFT);
+			ScaledResolution resolution = new ScaledResolution(MC);
+			int width = resolution.getScaledWidth();
+			int height = resolution.getScaledHeight();
 
-			int width = scaledResolution.getScaledWidth(), height = scaledResolution.getScaledHeight();
-			int offsetX, offsetY;
-			offsetX = offsetY = 5;
+			int left, top;
+			String position = Config.position();
+			boolean right = false;
 
-			String text = getText();
-
-			switch(WallJump.config.display()) {
-				case "icons":
-					offsetX = width / 2 + 10;
-					offsetY = WallJump.MINECRAFT.player.isInWater() ? height - 59 : height - 49; // TODO respond properly to bar height (GuiIngameForge)
-					break;
-				/*case 1: TODO reimplement moving the bar
-					offsetX = width / 2 - 90;
-					offsetY = (ForgeHooks.getTotalArmorValue(WallJump.MINECRAFT.player) > 0 ? height - 59 : height - 49);
-					break;
-				case 2:
-					break; // Keep defaults
-				case 3:
-					offsetX = width - 85;
-					// Keep default Y
-					break;
-				case 4:
-					// Keep default X
-					offsetY = height - 15;
-					break;
-				case 5:
-					offsetX = width - 85;
-					offsetY = height - 15;
-					break;
-				case 6:
-					break; // Keep defaults
-				case 7:
-					offsetX = width - WallJump.MINECRAFT.fontRenderer.getStringWidth(text) - 5;
-					// Keep default Y
-					break;
-				case 8:
-					// Keep default X
-					offsetY = height - 15;
-					break;
-				case 9:
-					offsetX = width - WallJump.MINECRAFT.fontRenderer.getStringWidth(text) - 5;
-					offsetY = height - 15;
-					break;*/
+			if("bar".equals(position)) {
+				left = width / 2 - 90;
+				top = height - GuiIngameForge.left_height;
+				GuiIngameForge.left_height += 9;
+			} else {
+				top = position.charAt(0) == 's' ? height - 14 : 5;
+				left = (right = position.charAt(1) == 'e') ? width - 5 : 5;
 			}
 
-			if(jumpsLeft > 0 && WallJump.config.enabled()) {
-				GuiIngame gui = WallJump.MINECRAFT.ingameGUI;
-
-				if(WallJump.config.display().equals("icons")) {
-					String barIcons = WallJump.config.barIcons();
-					int u = barIcons.equals("feathers") ? 9 : barIcons.equals("boots") ? 0 : barIcons.equals("players") ? 18 : 27;
-					for(int i = 0; i < jumpsLeft && i < 10; i++) {
-						gui.drawTexturedModalRect(offsetX + 8 * i, offsetY, u, 0, 9, 9);
-					}
-				} else {
-					gui.drawString(WallJump.MINECRAFT.fontRenderer, text, offsetX, offsetY, 0xffffff);
-				}
+			if("icons".equals(Config.display())) {
+				drawBar(left, top, Config.iconIndex(), jumpsLeft, right);
+			} else {
+				drawText(left, top, right);
 			}
 		}
 	}
 
-	public static String getText() {
-		return I18n.format("wallJump.remaining", WallJump.config.capacity().equals("unlimited") ? I18n.format("walljump.infinity") : jumpsLeft);
+	private static void drawText(int left, int top, boolean right) {
+		String text = I18n.format("wallJump.remaining", Config.capacity().equals("unlimited") ? I18n.format("walljump.infinity") : jumpsLeft);
+
+		if(right) {
+			MC.ingameGUI.drawString(MC.fontRenderer, text, left - MC.fontRenderer.getStringWidth(text), top, 0xffffff);
+		} else {
+			MC.ingameGUI.drawString(MC.fontRenderer, text, left, top, 0xffffff);
+		}
 	}
 
 	/** Draws {@code count} icons in a bar */
-	public static void drawIcons(int x, int y, int iconIndex, int count) {
-		if(count > 0 && WallJump.config.enabled()) {
-			// TODO move bar code
+	private static void drawBar(int left, int top, int iconIndex, int count, boolean right) {
+		iconIndex *= 9;
+
+		if(count > 10) count = 10;
+		if(right) left -= (count + 1) * 8;
+
+		if(Config.enabled()) {
+			for(int i = 0, x = left; i < count; i++, x += 8) {
+				MC.ingameGUI.drawTexturedModalRect(x, top, iconIndex, 0, 9, 9);
+			}
 		}
 	}
 
 	/** Play a wall jump sound for the wall in front of the player */
-	public static void playJumpSound(World world, EntityPlayer player) {
+	private static void playJumpSound(World world, EntityPlayer player) {
 		BlockPos pos = getWallTarget(player);
 		IBlockState state = world.getBlockState(pos);
 		SoundType sound = state.getBlock().getSoundType(state, world, pos, player);
@@ -280,12 +209,12 @@ public class Events {
 	}
 
 	/** @return The wall in front of the player */
-	public static IBlockState getWall(World world, EntityPlayer player) {
+	private static IBlockState getWall(World world, EntityPlayer player) {
 		return world.getBlockState(getWallTarget(player));
 	}
 
 	/** Gets the position of the potential wall in front of the player */
-	public static BlockPos getWallTarget(EntityPlayer player) {
-		return player.getPosition().offset(WallJump.MINECRAFT.getRenderViewEntity().getHorizontalFacing());
+	private static BlockPos getWallTarget(EntityPlayer player) {
+		return player.getPosition().offset(MC.getRenderViewEntity().getHorizontalFacing());
 	}
 }

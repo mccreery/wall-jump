@@ -18,13 +18,11 @@ import tk.nukeduck.walljump.settings.GuiWallJumpMenu;
 
 @Mod(modid = "walljump", name = "Wall Jump", version = "1.2.4")
 public class WallJump {
-	public static Minecraft MINECRAFT = Minecraft.getMinecraft();
-	public static Events    EVENTS    = new Events();
-
-	public static Config config;
-
 	public static final KeyBinding SETTINGS = new KeyBinding("wallJump.key.menu", Keyboard.KEY_J, "wallJump.category");
 	public static final KeyBinding ACTION   = new KeyBinding("wallJump.key.jump", Keyboard.KEY_F, "wallJump.category");
+
+	public static Minecraft MC = Minecraft.getMinecraft();
+	public static Config config;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -37,15 +35,13 @@ public class WallJump {
 		ClientRegistry.registerKeyBinding(ACTION);
 
 		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.EVENT_BUS.register(EVENTS);
-
-		EVENTS.reloadProhibitedBlocks();
+		MinecraftForge.EVENT_BUS.register(new Events());
 	}
 
 	@SubscribeEvent
 	public void onKeyInput(KeyInputEvent event) {
-		if(WallJump.MINECRAFT.currentScreen == null && Keyboard.getEventKeyState() && Keyboard.getEventKey() == SETTINGS.getKeyCode()) {
-			WallJump.MINECRAFT.displayGuiScreen(new GuiWallJumpMenu());
+		if(MC.currentScreen == null && Keyboard.getEventKeyState() && Keyboard.getEventKey() == SETTINGS.getKeyCode()) {
+			MC.displayGuiScreen(new GuiWallJumpMenu());
 		}
 	}
 }

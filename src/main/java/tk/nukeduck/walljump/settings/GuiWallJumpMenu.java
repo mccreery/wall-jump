@@ -25,7 +25,7 @@ public class GuiWallJumpMenu extends GuiScreen {
 		final int top = this.height / 4;
 
 		buttonList.add(new GuiButton(0, this.width / 2 - 100, top, I18n.format("menu.returnToGame")));
-		GuiSetting[] buttons = WallJump.config.getButtons();
+		GuiSetting[] buttons = Config.getButtons();
 
 		for(int i = 0; i < buttons.length; i++) {
 			GuiSetting button = buttons[i];
@@ -53,7 +53,7 @@ public class GuiWallJumpMenu extends GuiScreen {
 					GuiButton dependent = buttonList.get(i);
 
 					if(dependent instanceof GuiSetting && dependent != button) {
-						dependent.enabled = WallJump.config.enabled();
+						dependent.enabled = Config.enabled();
 					}
 				}
 			}
@@ -64,12 +64,14 @@ public class GuiWallJumpMenu extends GuiScreen {
 		}
 	}
 
+	@Override
 	public void onGuiClosed() {
 		Keyboard.enableRepeatEvents(false);
+		Config.updateExceptions(exceptions.getText());
 		if(WallJump.config.hasChanged()) WallJump.config.save();
-		WallJump.EVENTS.reloadProhibitedBlocks();
 	}
 
+	@Override
 	public void drawScreen(int par1, int par2, float par3) {
 		this.drawDefaultBackground();
 		this.drawCenteredString(mc.fontRenderer, I18n.format("menu.walljump"), this.width / 2, 40, 0xffffff);
@@ -80,40 +82,37 @@ public class GuiWallJumpMenu extends GuiScreen {
 
 		RenderHelper.enableGUIStandardItemLighting();
 
-		IBlockState[] prohibitedBlocks = WallJump.EVENTS.prohibitedBlocks;
-		ItemStack[] stacks = new ItemStack[prohibitedBlocks.length];
-		int toolTipIndex = -1;
-
-		int yBase = this.exceptions.y + this.exceptions.height + 5;
+		int yBase = exceptions.y + exceptions.height + 5;
 		int perLine = 12;
 
-		for(int i = 0; i < prohibitedBlocks.length; i++) {
-			IBlockState current = prohibitedBlocks[i];
-			stacks[i] = new ItemStack(current.getBlock(), 1, current.getBlock().getMetaFromState(current));
+		ItemStack tooltipStack = null;
+
+		for(int i = 0; i < Config.exceptions.size(); i++) {
+			IBlockState current = Config.exceptions.get(i);
+			ItemStack stack = new ItemStack(current.getBlock(), 1, current.getBlock().getMetaFromState(current));
 
 			int x = this.width / 2 - Math.round(18 * perLine / 2F) + ((i % perLine) * 18);
 			int y = yBase + ((i / perLine) * 18);
 
-			mc.getRenderItem().renderItemAndEffectIntoGUI(stacks[i], x, y);
+			mc.getRenderItem().renderItemAndEffectIntoGUI(stack, x, y);
 			if(par1 >= x && par1 <= x + 16 && par2 >= y && par2 <= y + 16) {
-				toolTipIndex = i;
+				tooltipStack = stack;
 			}
 		}
 		RenderHelper.disableStandardItemLighting();
 
-		if(toolTipIndex != -1) {
-			this.renderToolTip(stacks[toolTipIndex], par1, par2);
+		if(tooltipStack != null) {
+			this.renderToolTip(tooltipStack, par1, par2);
 		}
 	}
 
+	@Override
 	protected void keyTyped(char c, int i) throws IOException {
 		super.keyTyped(c, i);
 		exceptions.textboxKeyTyped(c, i);
-
-		WallJump.config.exceptions.set(exceptions.getText());
-		WallJump.EVENTS.reloadProhibitedBlocks();
 	}
 
+	@Override
 	protected void mouseClicked(int i, int j, int k) throws IOException {
 		super.mouseClicked(i, j, k);
 		exceptions.mouseClicked(i, j, k);
