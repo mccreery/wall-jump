@@ -3,17 +3,16 @@ wallJump.key.jump=Wall Jump
 wallJump.key.menu=Wall Jump Menu
 
 menu.wallJump=Wall Jump Settings
-menu.wallJump.moreStable=< More Stable
-menu.wallJump.prohibited=Prohibited blocks for wall jumping (seperate using commas)
+menu.walljump.prohibited=Prohibited blocks for wall jumping (seperate using commas)
 
-menu.wallJump.setting.wallJumping=Wall Jumping
+options.walljump.enabled=Wall Jumping
 menu.wallJump.setting.flyingWallJump=Flying Wall Jump
-menu.wallJump.setting.barIcons=Bar Icons
-menu.wallJump.setting.jumpType=Jumping Type
-menu.wallJump.setting.autoTurn=Auto-Turn
-menu.wallJump.setting.displayType=Display
-menu.wallJump.setting.useSpace=Use Jump Key
-menu.wallJump.setting.circleMode=Circle Mode
+options.walljump.barIcons=Bar Icons
+options.walljump.capacity=Jumping Type
+options.walljump.autoTurn=Auto-Turn
+options.walljump.display=Display
+options.walljump.jumpKey=Use Jump Key
+options.walljump.circleMode=Circle Mode
 menu.wallJump.setting.locked=Locked
 
 menu.wallJump.setting.barIcons.boots=Boots
