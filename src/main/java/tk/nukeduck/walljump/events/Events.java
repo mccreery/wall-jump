@@ -26,7 +26,7 @@ import tk.nukeduck.walljump.WallJump;
 import tk.nukeduck.walljump.settings.Config;
 
 public class Events {
-	private static final ResourceLocation ICONS = new ResourceLocation("walljump", "textures/gui/wallJumpIcons.png");
+	private static final ResourceLocation ICONS = new ResourceLocation("walljump", "textures/gui/icons.png");
 
 	/** Indicates how many degrees are still to be turned by the player. */
 	private static int rotationRemaining;
