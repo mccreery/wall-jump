@@ -112,13 +112,13 @@ public class Config extends Configuration {
 
 	public static GuiSetting[] getButtons() {
 		return new GuiSetting[] {
-			new GuiToggle(0, 150, 20, enabled),
-			new GuiToggle(0, 150, 20, autoTurn),
-			new GuiToggle(0, 150, 20, jumpKey),
-			new GuiToggle(0, 150, 20, circleMode),
-			new GuiSetting(0, 150, 20, barIcons),
-			new GuiSetting(0, 150, 20, capacity),
-			new GuiSetting(0, 150, 20, display)
+			new GuiToggle(0, 0, 0, 150, 20, enabled),
+			new GuiToggle(0, 0, 0, 150, 20, autoTurn),
+			new GuiToggle(0, 0, 0, 150, 20, jumpKey),
+			new GuiToggle(0, 0, 0, 150, 20, circleMode),
+			new GuiSetting(0, 0, 0, 150, 20, barIcons),
+			new GuiSetting(0, 0, 0, 150, 20, capacity),
+			new GuiSetting(0, 0, 0, 150, 20, display)
 		};
 	}
 }
