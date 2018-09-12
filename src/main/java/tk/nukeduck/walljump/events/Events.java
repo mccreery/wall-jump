@@ -65,7 +65,7 @@ public class Events {
 
 	@SubscribeEvent
 	public void onPlayerTick(PlayerTickEvent e) {
-		if(e.phase == Phase.END && MC != null) {
+		if(e.phase == Phase.END && MC != null && MC.player != null) {
 			if(!MC.player.collidedHorizontally) {
 				shouldSprint = MC.player.isSprinting();
 			}
@@ -119,7 +119,7 @@ public class Events {
 		}
 
 		//Refill wall jump bar according to boots worn
-		if(MC.world != null && MC.player.onGround) {
+		if(MC.world != null && MC.player != null && MC.player.onGround) {
 			String capacity = Config.capacity();
 			if(capacity.equals("limited")) {
 				if(MC.player.inventory.armorItemInSlot(0) != null) {
