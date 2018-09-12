@@ -14,6 +14,7 @@ menu.wallJump.setting.autoTurn=Auto-Turn
 menu.wallJump.setting.displayType=Display
 menu.wallJump.setting.useSpace=Use Jump Key
 menu.wallJump.setting.circleMode=Circle Mode
+menu.wallJump.setting.locked=Locked
 
 menu.wallJump.setting.barIcons.boots=Boots
 menu.wallJump.setting.barIcons.feathers=Feathers
@@ -37,3 +38,4 @@ menu.wallJump.setting.displayType.textBottomRight=Text Bottom Right
 
 wallJump.remaining=Wall Jumps Remaining: %s
 wallJump.infinity=Infinity
+wallJump.lock=Lock these settings and disable the menu key

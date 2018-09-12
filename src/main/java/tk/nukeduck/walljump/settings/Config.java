@@ -18,7 +18,7 @@ public class Config extends Configuration {
 	}
 
 	private static Property enabled, autoTurn, jumpKey, circleMode,
-		barIcons, capacity, display, exceptionsP, position;
+		barIcons, capacity, display, exceptionsP, position, locked;
 
 	@Override
 	public void load() {
@@ -33,6 +33,7 @@ public class Config extends Configuration {
 		capacity = get(CATEGORY_GENERAL, "capacity", "fixed", "[fixed, armor, unlimited]", new String[] {"fixed", "armor", "unlimited"});
 		display = get(CATEGORY_GENERAL, "display", "icons", "[icons, text]", new String[] {"icons", "text"});
 		position = get(CATEGORY_GENERAL, "position", "bar", "[bar, ne, se, sw, nw]", new String[] {"bar, ne, se, sw, nw"});
+		locked = get(CATEGORY_GENERAL, "locked", false, "true to lock settings and disable menu key");
 
 		exceptionsP = get(CATEGORY_GENERAL, "exceptions", "");
 		loadExceptions(exceptionsP.getString());
@@ -61,6 +62,11 @@ public class Config extends Configuration {
 	public static String capacity() {return capacity.getString();}
 	public static String display() {return display.getString();}
 	public static String position() {return position.getString();}
+	public static boolean locked() {return locked.getBoolean();}
+
+	public static void setLocked(boolean locked) {
+		Config.locked.set(locked);
+	}
 
 	public static void updateExceptions(String exceptions) {
 		Config.exceptionsP.set(exceptions);

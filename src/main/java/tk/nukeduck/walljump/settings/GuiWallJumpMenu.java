@@ -1,11 +1,14 @@
 package tk.nukeduck.walljump.settings;
 
+import static tk.nukeduck.walljump.WallJump.MC;
+
 import java.io.IOException;
 
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiLockIconButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.RenderHelper;
@@ -15,6 +18,7 @@ import tk.nukeduck.walljump.WallJump;
 
 public class GuiWallJumpMenu extends GuiScreen {
 	private GuiToggle enabled;
+	private GuiLockIconButton lock;
 
 	/** A text box containing all block IDs which cannot be wall jumped from */
 	private GuiTextField exceptions;
@@ -22,16 +26,20 @@ public class GuiWallJumpMenu extends GuiScreen {
 	public void initGui() {
 		Keyboard.enableRepeatEvents(true);
 		this.buttonList.clear();
-		final int top = this.height / 4;
+		final int top = height / 6 - 12;
 
-		buttonList.add(new GuiButton(0, this.width / 2 - 100, top, I18n.format("menu.returnToGame")));
+		buttonList.add(new GuiButton(0, this.width / 2 - 100, top, 180, 20, I18n.format("menu.returnToGame")));
+		buttonList.add(lock = new GuiLockIconButton(1, this.width / 2 + 80, top));
+		lock.setLocked(Config.locked());
+
+		int idOffset = buttonList.size();
 		GuiSetting[] buttons = Config.getButtons();
 
 		for(int i = 0; i < buttons.length; i++) {
 			GuiSetting button = buttons[i];
 			button.x = width/2 - 152 + (i & 1) * 154;
-			button.y = top + (i / 2) * 24;
-			button.id = i+1;
+			button.y = top + (i / 2 + 2) * 24;
+			button.id = idOffset + i;
 
 			if(button.getName().equals("enabled") && button instanceof GuiToggle) {
 				enabled = (GuiToggle)button;
@@ -57,6 +65,9 @@ public class GuiWallJumpMenu extends GuiScreen {
 					}
 				}
 			}
+		} else if(button == lock) {
+			lock.setLocked(!lock.isLocked());
+			Config.setLocked(lock.isLocked());
 		} else { // Only button left is close
 			this.mc.displayGuiScreen(null);
 			this.mc.setIngameFocus();
@@ -103,6 +114,8 @@ public class GuiWallJumpMenu extends GuiScreen {
 
 		if(tooltipStack != null) {
 			this.renderToolTip(tooltipStack, par1, par2);
+		} else if(lock.mousePressed(MC, par1, par2)) {
+			drawHoveringText(I18n.format("walljump.lock"), par1, par2);
 		}
 	}
 
